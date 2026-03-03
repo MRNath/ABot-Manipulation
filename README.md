@@ -1,7 +1,7 @@
 <div align="center">
-<img src="assets/logo.png" alt="Logo" width="100"/>
+<img src="assets/logo.png" alt="Logo" width="200"/>
 
-<h1>ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learnin</h1>
+<h1>ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learning</h1>
 
 <p align="center">
   <b>AMAP CV Lab</b>
@@ -9,12 +9,9 @@
 
 
 <p align="center">
-  <a href="https://github.com/amap-cvlab/ABot-Manipulation/blob/main/assets/ABot-M0_Technical_Report.pdf"><img src="https://img.shields.io/static/v1?label=Paper&message=Technical_Report&color=red&logo=arxiv"></a>
+  <a href="https://arxiv.org/abs/2602.11236"><img src="https://img.shields.io/static/v1?label=Paper&message=Technical_Report&color=red&logo=arxiv"></a>
   <a href="https://amap-cvlab.github.io/ABot-Manipulation/"><img src="https://img.shields.io/badge/Project-Website-blue"></a>
-  <!-- <a href="https://huggingface.co/...."><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20Model&message=HuggingFace&color=orange"></a>
-  <a href="https://modelscope.cn/...."><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%96%20Model&message=ModelScope&color=purple"></a> -->
-    <a href="https://huggingface.co/...."><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20Model&message=Coming_soon&color=orange"></a>
-  <a href="https://modelscope.cn/...."><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%96%20Model&message=Coming_soon&color=purple"></a>
+    <a href="https://huggingface.co/acvlab"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20Model&message=HuggingFace&color=orange"></a>
 </p>
 
 </div>
@@ -35,21 +32,96 @@
 ---
 
 ## 📢 News
-[2026-2-11] 🥳🥳**ABot-M0**'s [technical report]() have been released. Weights and codes are coming soon. 🎉🎉
+[2026-2-27] 🥳🥳**ABot-M0**'s The [weights](https://huggingface.co/acvlab) and [inference code](https://github.com/amap-cvlab/ABot-Manipulation) have been released. And updated the latest result of ABot-M0 on RoboTwin2.0 to 86.1. The full content will be released soon.🎉🎉
+
+[2026-2-11] 🥳🥳**ABot-M0**'s [technical report](https://arxiv.org/abs/2602.11236) have been released. Weights and codes are coming soon. 🎉🎉
 
 ---
 
+
+
+## Table of Contents
+- [🛠️ Installation](#-Installation)
+- [🏆 Model Zoo](#-Model-Zoo)
+- [📈 Evaluation](#-Evaluation)
+- [📜 Citing](#-Citing)
+- [🙏 Acknowledgement](#-acknowledgement)
+
+## 🛠️ Installation
+
+Create the required environment through the following steps:
+
+
+
+```bash
+# Clone the repo
+git clone https://github.com/amap-cvlab/ABot-Manipulation.git
+git clone https://github.com/facebookresearch/vggt.git
+cd ABot-Manipulation
+
+# Create conda environment
+conda create -n ABot python=3.10 -y
+conda activate ABot
+
+# Install requirements
+pip install -r requirements.txt
+
+# Install FlashAttention2
+pip install flash-attn --no-build-isolation
+
+
+# Install vggt
+pip install -e path_to_vggt
+
+# Install ABot
+pip install -e .
+
+```
+
+
+
+
+
+## 🏆 Model Zoo
+
+| Model Name | Huggingface Repository  |Description |
+| :--- |  :--- | :--- |
+| ABot-LIBERO &nbsp; | [🤗 ABot-M0-LIBERO](https://huggingface.co/acvlab/ABot-M0-LIBERO)  | ABot trained solely on LIBERO for evaluation on LIBERO and zero-shot generalization to LIBERO-Plus. |
+| ABot-RoboCasa-GR1-Tabletop   | [🤗 ABot-M0-Robocasa](https://huggingface.co/acvlab/ABot-M0-Robocasa) | ABot trained on RoboCasa-GR1-Tabletop for evaluation. |
+| ABot-Robotwin2  | [🤗 ABot-M0-RoboTwin2](https://huggingface.co/acvlab/ABot-M0-RoboTwin2)  | ABot trained on Robotwin2 Clean and Randomized for evaluation.|
+---
+
+
+
+
+
+
+## 📈 Evaluation
+Please refer to the guidance in the `examples` folder to evaluate the benchmarks.
+
+### Results 🎉🎉
+|  | LIBERO | LIBERO-PLUS  |RoboCasa-GR1-Tabletop |RoboTwin2.0 |
+| :--- | :--- | :--- | :--- |:--- |
+| **ABot-M0** | **98.6** | **80.5** | **58.3**| **86.1**|
+
+---
 
 ## 📜 Citing
 
 If you find **ABot** is useful in your research or applications, please consider giving us a **star** 🌟 and **citing** it by the following BibTeX entry:
 
 ```
-              @article{abot-m0,
-                title={ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learning},
-                author={Foundation Model Team, AMAP CV Lab},
-                year={2026}
-              }
+@article{yang2026abot,
+  title={ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learning},
+  author={Yang, Yandan and Zeng, Shuang and Lin, Tong and Chang, Xinyuan and Qi, Dekang and Xiao, Junjin and Liu, Haoyun and Chen, Ronghan and Chen, Yuzhi and Huo, Dongjie and others},
+  journal={arXiv preprint arXiv:2602.11236},
+  year={2026}
+}
 ```
 
 ---
+
+
+## 🙏 Acknowledgement
+This project builds upon [starVLA](https://github.com/starVLA/starVLA), [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [vggt](https://github.com/facebookresearch/vggt), [JiT](https://github.com/LTH14/JiT), [LeRobot](https://github.com/huggingface/lerobot) and [Isaac-GR00T](https://github.com/NVIDIA/Isaac-GR00T). We thank these teams for their open-source contributions.
+
