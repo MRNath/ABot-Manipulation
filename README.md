@@ -20,7 +20,7 @@
 
 ## 🌟 ABot-M0 is a general-purpose robotics model with the following core highlights:
 <div style="text-align: center;">
-  <img src="assets/model.jpg" alt="JanusVLN" width="888"/>
+  <img src="assets/model.jpg" alt="ABot" width="888"/>
 </div>
 
 - **Massive & Unified Data:** It integrates over 6 million open-source trajectories to form the largest unified dataset for robotic manipulation, providing a strong foundation for generalization.
