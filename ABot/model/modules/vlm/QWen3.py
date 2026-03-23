@@ -124,6 +124,7 @@ class _QWen3_VL_Interface(nn.Module):
 
         # Extract state from kwargs if provided
         states = kwargs.get("state", None)
+        max_length = kwargs.get("max_length", None)
         
         # Create messages: one message per sample
         messages = []
@@ -169,13 +170,22 @@ class _QWen3_VL_Interface(nn.Module):
 
         # Preparation for inference
 
+        processor_kwargs = {
+            "tokenize": True,
+            "add_generation_prompt": True,
+            "return_dict": True,
+            "return_tensors": "pt",
+        }
+        if max_length is None:
+            processor_kwargs["padding"] = True
+        else:
+            processor_kwargs["padding"] = "max_length"
+            processor_kwargs["max_length"] = int(max_length)
+            processor_kwargs["truncation"] = True
+
         batch_inputs = self.processor.apply_chat_template(
-        messages,
-        tokenize=True,
-        padding=True,
-        add_generation_prompt=True,
-        return_dict=True,
-        return_tensors="pt"
+            messages,
+            **processor_kwargs,
         )
 
         # if solutions, mask out the solution tokens in labels

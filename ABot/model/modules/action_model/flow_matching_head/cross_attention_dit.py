@@ -31,12 +31,12 @@ from torch import nn
 class TimestepEncoder(nn.Module):
     def __init__(self, embedding_dim, compute_dtype=torch.float32):
         super().__init__()
+        self.compute_dtype = compute_dtype if compute_dtype is not None else torch.float32
         self.time_proj = Timesteps(num_channels=256, flip_sin_to_cos=True, downscale_freq_shift=1)
         self.timestep_embedder = TimestepEmbedding(in_channels=256, time_embed_dim=embedding_dim)
 
     def forward(self, timesteps):
-        dtype = next(self.parameters()).dtype
-        timesteps_proj = self.time_proj(timesteps).to(dtype)
+        timesteps_proj = self.time_proj(timesteps).to(self.compute_dtype)
         timesteps_emb = self.timestep_embedder(timesteps_proj)  # (N, D)
         return timesteps_emb
 
@@ -271,6 +271,7 @@ class DiT(ModelMixin, ConfigMixin):
     ):
         # Encode timesteps
         temb = self.timestep_encoder(timestep)
+        temb = temb.to(hidden_states.dtype)
 
         # Process through transformer blocks - single pass through the blocks
         hidden_states = hidden_states.contiguous()
