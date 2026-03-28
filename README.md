@@ -33,7 +33,7 @@
 ---
 
 ## 📢 News
-[2026-3-27] 🥳🥳**ABot-M0**'s 🎉🎉 [training code](https://github.com/amap-cvlab/ABot-Manipulation), [pre-trained weight](https://huggingface.co/acvlab/ABot-M0-Pretrain) and [data](https://www.modelscope.cn/datasets/amap_cvlab/Abot-M0-MetaData) are now available.🎉🎉
+[2026-3-27] 🥳🥳**ABot-M0**'s 🎉🎉 [training code](https://github.com/amap-cvlab/ABot-Manipulation), [pre-trained weight](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain) and [data](https://www.modelscope.cn/datasets/amap_cvlab/Abot-M0-MetaData) are now available.🎉🎉
 
 [2026-2-27] 🥳🥳**ABot-M0**'s The [weights](https://huggingface.co/acvlab) and [inference code](https://github.com/amap-cvlab/ABot-Manipulation) have been released. And updated the latest result of ABot-M0 on RoboTwin2.0 to 86.1. The full content will be released soon.🎉🎉
 
@@ -89,7 +89,7 @@ pip install -e .
 
 | Model Name | Huggingface Repository  |Description |
 | :--- |  :--- | :--- |
-| ABot-Pretrain &nbsp; | [🤗 ABot-M0-Pretrain](https://huggingface.co/acvlab/ABot-M0-Pretrain)  | Latest ABot pre-training with action manifold learning. |
+| ABot-Pretrain &nbsp; | [🤗 ABot-M0-Pretrain](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain)  | Latest ABot pre-training with action manifold learning. |
 | ABot-LIBERO &nbsp; | [🤗 ABot-M0-LIBERO](https://huggingface.co/acvlab/ABot-M0-LIBERO)  | ABot trained solely on LIBERO for evaluation on LIBERO and zero-shot generalization to LIBERO-Plus. |
 | ABot-RoboCasa-GR1-Tabletop   | [🤗 ABot-M0-Robocasa](https://huggingface.co/acvlab/ABot-M0-Robocasa) | ABot trained on RoboCasa-GR1-Tabletop for evaluation. |
 | ABot-Robotwin2  | [🤗 ABot-M0-RoboTwin2](https://huggingface.co/acvlab/ABot-M0-RoboTwin2)  | ABot trained on Robotwin2 Clean and Randomized for evaluation.|

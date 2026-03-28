@@ -145,7 +145,7 @@ class AgilexDataConfig:
     ]
     action_keys = [
         "action.left_joints",
-        "action.right_joints",  # @JinhuiYE this order is different from Dataset
+        "action.right_joints",  
         "action.left_gripper",
         "action.right_gripper",
     ]

@@ -50,7 +50,7 @@ datasets:
   vla_data:
     dataset_py: lerobot_datasets
     data_root_dir: path_to_your_libero_data
-    data_mix: libero_all
+    data_mix: libero
     action_type: delta_qpos
     include_state: false
     sequential_step_sampling: False

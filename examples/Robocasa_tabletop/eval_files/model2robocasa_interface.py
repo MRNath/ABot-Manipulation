@@ -59,7 +59,7 @@ class PolicyWarper:
         unnorm_key: Optional[str] = None,
         policy_setup: str = "franka",
         horizon: int = 0,
-        action_ensemble = False, # @Jinhui
+        action_ensemble = False, 
         action_ensemble_horizon: Optional[int] = 3, # different cross sim
         image_size: list[int] = [224, 224],
         use_ddim: bool = True,

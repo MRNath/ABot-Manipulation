@@ -46,7 +46,7 @@ datasets:
   vla_data:
     dataset_py: lerobot_datasets
     data_root_dir: path_to_your_data_root_dir
-    data_mix: robotwin_all_50
+    data_mix: robotwin
     action_type: abs_qpos
     action_mode: abs
     sequential_step_sampling: False

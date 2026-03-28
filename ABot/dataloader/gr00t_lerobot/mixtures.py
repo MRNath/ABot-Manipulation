@@ -153,8 +153,8 @@ DATASET_NAMED_MIXTURES.update(libero_mixtures)
 ######################################################## RoboTwin ########################################################
 
 robotwin_mixture_name = 'robotwin'
-rel_robotwin_path = ["robotwin/lerobot_eef_clean50",
-                     "robotwin/lerobot_4v_eef_random500"]
+rel_robotwin_path = ["robotwin/Clean",
+                     "robotwin/Randomized"]
 abs_robotwin_path = [str(DATASETS_ROOT / rel_path) for rel_path in rel_robotwin_path]
 robotwin_mapping_jsons = [str(REPO_ROOT / "ABot/dataloader/gr00t_lerobot/robot_type_map/Robotwin_clean.json"),
                           str(REPO_ROOT / "ABot/dataloader/gr00t_lerobot/robot_type_map/Robotwin_random.json")]
@@ -172,8 +172,8 @@ DATASET_NAMED_MIXTURES.update(robotwin_mixtures)
 
 ######################################################## RoboCase ########################################################
 
-robotcase_mixture_name = 'robotcase'
-rel_robotcase_path = ["robotcase"]
+robotcase_mixture_name = 'robocase_gr1'
+rel_robotcase_path = ["robocase_gr1"]
 abs_robotcase_path = [str(DATASETS_ROOT / rel_path) for rel_path in rel_robotcase_path]
 robotcase_mapping_jsons = [str(REPO_ROOT / "ABot/dataloader/gr00t_lerobot/robot_type_map/RoboCase.json")]
 robotcase_mixtures = generate_dataset_mixture(

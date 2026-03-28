@@ -88,7 +88,7 @@ class SimulationInferenceEnv:
         """Get action from the model based on observations."""
         # NOTE(YL)!
         # hot fix to change the video.ego_view_bg_crop_pad_res256_freq20 to video.ego_view
-        if "video.ego_view_bg_crop_pad_res256_freq20" in observations: # BUG @JinhuiYE here only one viwes
+        if "video.ego_view_bg_crop_pad_res256_freq20" in observations: 
             observations["video.ego_view"] = observations.pop(
                 "video.ego_view_bg_crop_pad_res256_freq20"
             )

@@ -47,7 +47,7 @@ datasets:
   vla_data:
     dataset_py: lerobot_datasets
     data_root_dir: path_to_your_data_root_dir
-    data_mix: fourier_gr1_unified_1000 
+    data_mix: robocase_gr1 
     action_type: delta_ee
     sequential_step_sampling: False
     default_image_resolution: [3, 224, 224]

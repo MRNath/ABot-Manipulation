@@ -5,7 +5,7 @@ base_vlm=path_to_your_base_vlm_checkpoint
 freeze_module_list='' # just for fast debug, sota is under fully FT, i.g., freeze_module_list=""
 DIT_TYPE="DiT-B"
 data_root_dir=path_to_your_data_root_dir
-data_mix=fourier_gr1_unified_1000
+data_mix=robocase_gr1
 pretrain_ckpt=path_to_your_pretrain_ckpt
 run_root_dir=path_to_your_run_root_dir
 run_id=your_run_id
