@@ -9,6 +9,7 @@
 | [Pretrain](Pretrain/index.md) | [ModelScope ABot-M0-Pretrain](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain) | → Pretrain/index.md |
 | [LIBERO](LIBERO/index.md) | [HuggingFace ABot-M0-LIBERO](https://huggingface.co/acvlab/ABot-M0-LIBERO) | → LIBERO/index.md |
 | [LIBERO-plus](LIBERO-plus/index.md) | 同 LIBERO 权重（零样本泛化） | → LIBERO-plus/index.md |
+| [Alicia](Alicia/index.md) | 使用 Alicia LeRobot v3 数据进行微调 | → Alicia/index.md |
 | [Robotwin](Robotwin/index.md) | [HuggingFace ABot-M0-RoboTwin2](https://huggingface.co/acvlab/ABot-M0-RoboTwin2) | → Robotwin/index.md |
 | [Robocasa_tabletop](Robocasa_tabletop/index.md) | [HuggingFace ABot-M0-Robocasa](https://huggingface.co/acvlab/ABot-M0-Robocasa) | → Robocasa_tabletop/index.md |
 

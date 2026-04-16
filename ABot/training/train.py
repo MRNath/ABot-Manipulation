@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import time
@@ -78,16 +78,22 @@ def build_model(cfg) -> torch.nn.Module:
 from ABot.dataloader import build_dataloader
 
 
-def prepare_data(cfg, accelerator, output_dir) -> Tuple[DataLoader, DataLoader]:
+def prepare_data(cfg, accelerator, output_dir) -> Tuple[DataLoader, Optional[DataLoader]]:
     """prepare training data"""
     # VLA data loader
     logger.info(f"Creating VLA Dataset with Mixture `{cfg.datasets.vla_data.data_mix}`")
-    vla_train_dataloader = build_dataloader(cfg=cfg, dataset_py=cfg.datasets.vla_data.dataset_py)
+    vla_train_dataloader = build_dataloader(
+        cfg=cfg, dataset_py=cfg.datasets.vla_data.dataset_py, mode="train"
+    )
+    vla_val_dataloader = build_dataloader(
+        cfg=cfg, dataset_py=cfg.datasets.vla_data.dataset_py, mode="test"
+    )
 
     accelerator.dataloader_config.dispatch_batches = False
-    dist.barrier()
+    if dist.is_initialized():
+        dist.barrier()
 
-    return vla_train_dataloader
+    return vla_train_dataloader, vla_val_dataloader
 
 
 def setup_optimizer_and_scheduler(model, cfg) -> Tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
@@ -120,10 +126,20 @@ def setup_optimizer_and_scheduler(model, cfg) -> Tuple[torch.optim.Optimizer, to
 
 
 class VLATrainer(TrainerUtils):
-    def __init__(self, cfg, model, vla_train_dataloader, optimizer, lr_scheduler, accelerator):
+    def __init__(
+        self,
+        cfg,
+        model,
+        vla_train_dataloader,
+        vla_val_dataloader,
+        optimizer,
+        lr_scheduler,
+        accelerator,
+    ):
         self.config = cfg
         self.model = model
         self.vla_train_dataloader = vla_train_dataloader
+        self.vla_val_dataloader = vla_val_dataloader
         self.optimizer = optimizer
         self.lr_scheduler = lr_scheduler
         self.accelerator = accelerator
@@ -155,12 +171,14 @@ class VLATrainer(TrainerUtils):
         self.print_trainable_parameters(self.model)
 
         # initialize distributed training components
-        self.model, self.optimizer, self.vla_train_dataloader = self.setup_distributed_training(
-            self.accelerator,  # must be the first param
-            self.model,
-            self.optimizer,
-            self.vla_train_dataloader,
-        )
+        components = [self.model, self.optimizer, self.vla_train_dataloader]
+        if self.vla_val_dataloader is not None:
+            components.append(self.vla_val_dataloader)
+
+        prepared_components = self.setup_distributed_training(self.accelerator, *components)
+        self.model, self.optimizer, self.vla_train_dataloader = prepared_components[:3]
+        if self.vla_val_dataloader is not None:
+            self.vla_val_dataloader = prepared_components[3]
 
         self._init_wandb()
 
@@ -283,7 +301,7 @@ class VLATrainer(TrainerUtils):
     def _log_metrics(self, metrics):
         """record training metrics"""
         if self.completed_steps % self.config.trainer.logging_frequency == 0:
-            if dist.get_rank() == 0:
+            if (not dist.is_initialized()) or dist.get_rank() == 0:
                 # add learning rate 
                 metrics["learning_rate"] = self.lr_scheduler.get_last_lr()[0] # see lr group in yaml.trainer.learning_rate
 
@@ -381,28 +399,55 @@ class VLATrainer(TrainerUtils):
         :param metric_fn: Function to compute the distance between predicted and ground truth actions.
         :return: Average metric score across the evaluation dataset.
         """
+        if step_metrics is None:
+            step_metrics = {}
 
-        examples = self._get_next_batch()
-        score = 0.0
-        num_samples = len(examples)
-        actions = [example["action"] for example in examples]  # label
-        # Predict actions using the model
-        output_dict = self.model.predict_action(
-            examples=examples, use_ddim=True, num_ddim_steps=20
+        eval_batches = []
+        if self.vla_val_dataloader is not None:
+            eval_iter = iter(self.vla_val_dataloader)
+            eval_num_batches = int(getattr(self.config.trainer, "eval_num_batches", 8))
+            for _ in range(eval_num_batches):
+                try:
+                    eval_batches.append(next(eval_iter))
+                except StopIteration:
+                    break
+        else:
+            eval_batches.append(self._get_next_batch())
+
+        if len(eval_batches) == 0:
+            return step_metrics
+
+        local_score_sum = 0.0
+        local_points_sum = 0.0
+        was_training = self.model.training
+        self.model.eval()
+
+        with torch.no_grad():
+            for examples in eval_batches:
+                actions = np.array([example["action"] for example in examples])
+                output_dict = self.model.predict_action(
+                    examples=examples, use_ddim=True, num_ddim_steps=20
+                )
+                normalized_actions = output_dict["normalized_actions"]
+                local_score_sum += TrainerUtils.euclidean_distance(normalized_actions, actions)
+                local_points_sum += float(np.prod(actions.shape))
+
+        if was_training:
+            self.model.train()
+
+        metric_tensor = torch.tensor(
+            [local_score_sum, local_points_sum],
+            device=self.accelerator.device,
+            dtype=torch.float64,
         )
+        if dist.is_initialized():
+            dist.all_reduce(metric_tensor, op=dist.ReduceOp.SUM)
 
-        if self.accelerator.is_main_process:
-            normalized_actions = output_dict["normalized_actions"]  # B, T, D
-            actions = np.array(actions)  # convert actions to numpy.ndarray
-            # B, Chunk, dim = actions.shape
-            num_pots = np.prod(actions.shape)
-            # Compute the metric score
-            score = TrainerUtils.euclidean_distance(normalized_actions, actions)
-            average_score = score / num_pots
-            step_metrics["mse_score"] = average_score
+        if self.accelerator.is_main_process and metric_tensor[1].item() > 0:
+            step_metrics["mse_score"] = (metric_tensor[0] / metric_tensor[1]).item()
 
-        del examples
-        dist.barrier()  # ensure all processes are synchronized
+        if dist.is_initialized():
+            dist.barrier()  # ensure all processes are synchronized
         return step_metrics
 
     def _log_training_config(self):
@@ -413,6 +458,8 @@ class VLATrainer(TrainerUtils):
             logger.info(f"  Per device batch size = {self.config.datasets.vla_data.per_device_batch_size}")
             logger.info(f"  Gradient accumulation steps = {self.config.trainer.gradient_accumulation_steps}")
             logger.info(f"  Total batch size = {self.total_batch_size}")
+            if self.vla_val_dataloader is not None:
+                logger.info(f"  Validation batches per eval = {getattr(self.config.trainer, 'eval_num_batches', 8)}")
 
     def _train_step(self, batch_vla, batch_vlm=None):
         """execute single training step"""
@@ -479,7 +526,9 @@ def main(cfg) -> None:
     # build model
     vla = build_framework(cfg)
     # prepare data
-    vla_train_dataloader = prepare_data(cfg=cfg, accelerator=accelerator, output_dir=output_dir)
+    vla_train_dataloader, vla_val_dataloader = prepare_data(
+        cfg=cfg, accelerator=accelerator, output_dir=output_dir
+    )
 
     # set optimizer and scheduler
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model=vla, cfg=cfg)
@@ -490,6 +539,7 @@ def main(cfg) -> None:
         cfg=cfg,
         model=vla,
         vla_train_dataloader=vla_train_dataloader,
+        vla_val_dataloader=vla_val_dataloader,
         optimizer=optimizer,
         lr_scheduler=lr_scheduler,
         accelerator=accelerator,
@@ -502,8 +552,9 @@ def main(cfg) -> None:
 
     # And... we're done!
     logger.info("... and that's all, folks!")
-    dist.barrier()
-    dist.destroy_process_group()
+    if dist.is_initialized():
+        dist.barrier()
+        dist.destroy_process_group()
 
 
 if __name__ == "__main__":

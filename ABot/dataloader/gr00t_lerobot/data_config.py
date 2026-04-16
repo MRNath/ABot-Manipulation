@@ -131,6 +131,78 @@ class Libero4in1DataConfig:
 
         return ComposedModalityTransform(transforms=transforms)
 
+
+class AliciaJointV3DataConfig:
+    video_keys = [
+        "video.top_camera",
+        "video.wrist_camera",
+    ]
+    state_keys = [
+        "state.joints",
+    ]
+    action_keys = [
+        "action.joints",
+    ]
+    language_keys = ["annotation.human.action.task_description"]
+    observation_indices = [0]
+    action_indices = list(range(10))
+
+    def modality_config(self):
+        video_modality = ModalityConfig(
+            delta_indices=self.observation_indices,
+            modality_keys=self.video_keys,
+        )
+        state_modality = ModalityConfig(
+            delta_indices=self.observation_indices,
+            modality_keys=self.state_keys,
+        )
+        action_modality = ModalityConfig(
+            delta_indices=self.action_indices,
+            modality_keys=self.action_keys,
+        )
+        language_modality = ModalityConfig(
+            delta_indices=self.observation_indices,
+            modality_keys=self.language_keys,
+        )
+        return {
+            "video": video_modality,
+            "state": state_modality,
+            "action": action_modality,
+            "language": language_modality,
+        }
+
+    def transform(self):
+        transforms = [
+            StateActionToTensor(apply_to=self.state_keys),
+            StateActionToTensor(apply_to=self.action_keys),
+            StateActionTransform(
+                apply_to=self.state_keys,
+                normalization_modes={
+                    "state.joints": "q99",
+                },
+            ),
+            StateActionTransform(
+                apply_to=self.action_keys,
+                normalization_modes={
+                    "action.joints": "q99",
+                },
+            ),
+            ConcatStateActionTransform(
+                state_concat_order=self.state_keys,
+                action_concat_order=self.action_keys,
+            ),
+            BimanualPadTransform(
+                arm_state_dim=7,
+                arm_action_dim=7,
+                max_state_dim=14,
+                max_action_dim=14,
+                single_arm_placement="right",
+                pad_value_state=0.0,
+                pad_value_action=0.0,
+            ),
+        ]
+        return ComposedModalityTransform(transforms=transforms)
+
 class AgilexDataConfig:
     video_keys = [
         "video.cam_high",
@@ -1333,6 +1405,7 @@ ROBOT_TYPE_CONFIG_MAP = {
 
     # Libero
     "libero_franka": Libero4in1DataConfig(),
+    "alicia_joint_v3": AliciaJointV3DataConfig(),
 
     # RoboTwin
     "robotwin": AgilexDataConfig(),
@@ -1340,4 +1413,3 @@ ROBOT_TYPE_CONFIG_MAP = {
     # RoboCase
     "fourier_gr1_arms_waist": FourierGr1ArmsWaistDataConfig(),
 }
-

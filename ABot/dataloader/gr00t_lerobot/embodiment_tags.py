@@ -170,6 +170,7 @@ ROBOT_TYPE_TO_EMBODIMENT_TAG = {
 
     # Libero
     "libero_franka": EmbodimentTag.LIBERO_FRANKA,
+    "alicia_joint_v3": EmbodimentTag.NEW_EMBODIMENT,
 
     # RoboTwin
     "robotwin": EmbodimentTag.ROBOTWIN,

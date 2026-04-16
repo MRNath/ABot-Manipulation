@@ -74,6 +74,65 @@ EPSILON = 5e-4
 #  LeRobot v3.0 dataset file names 
 LE_ROBOT3_TASKS_FILENAME = "meta/tasks.parquet"
 LE_ROBOT3_EPISODE_FILENAME = "meta/episodes/*/*.parquet"
+LE_ROBOT3_STATS_FILENAME = "meta/stats.json"
+
+
+def _feature_vector_dim(feature_meta: dict) -> int:
+    shape = feature_meta.get("shape", [])
+    if len(shape) == 0:
+        raise ValueError(f"Feature has no shape information: {feature_meta}")
+    if len(shape) != 1:
+        raise ValueError(f"Only flat vector features are supported here, got shape={shape}")
+    return int(shape[0])
+
+
+def _build_v3_modality_meta_from_info(info_meta: dict) -> LeRobotModalityMetadata:
+    features = info_meta.get("features", {})
+
+    state = {}
+    if "observation.state" in features:
+        state["joints"] = {
+            "start": 0,
+            "end": _feature_vector_dim(features["observation.state"]),
+            "dtype": features["observation.state"].get("dtype", "float32"),
+            "absolute": True,
+            "original_key": "observation.state",
+        }
+
+    action = {}
+    if "action" in features:
+        action["joints"] = {
+            "start": 0,
+            "end": _feature_vector_dim(features["action"]),
+            "dtype": features["action"].get("dtype", "float32"),
+            "absolute": True,
+            "original_key": "action",
+        }
+
+    video = {}
+    for feature_key in sorted(features.keys()):
+        if feature_key.startswith("observation.images."):
+            alias = feature_key.split("observation.images.", 1)[1]
+            video[alias] = {
+                "original_key": feature_key,
+            }
+
+    annotation = None
+    if "task_index" in features:
+        annotation = {
+            "human.action.task_description": {
+                "original_key": "task_index",
+            }
+        }
+
+    return LeRobotModalityMetadata.model_validate(
+        {
+            "state": state,
+            "action": action,
+            "video": video,
+            "annotation": annotation,
+        }
+    )
 
 
 def _flatten_cell_to_1d_float32(x: Any) -> Optional[np.ndarray]:
@@ -368,6 +427,7 @@ class LeRobotSingleDataset(Dataset):
         le_modality_meta: LeRobotModalityMetadata,
         simplified_modality_meta: dict[str, dict],
     ) -> dict:
+        required_stat_names = ("mean", "std", "min", "max", "q01", "q99")
         dataset_statistics = {}
 
         for our_modality in ["state", "action"]:
@@ -381,7 +441,9 @@ class LeRobotSingleDataset(Dataset):
                 le_modality = state_action_meta.original_key
                 indices = np.arange(state_action_meta.start, state_action_meta.end)
 
-                for stat_name in le_statistics[le_modality]:
+                for stat_name in required_stat_names:
+                    if stat_name not in le_statistics[le_modality]:
+                        continue
                     stat = np.array(le_statistics[le_modality][stat_name])
                     dataset_statistics[our_modality][subkey][stat_name] = stat[indices].tolist()
 
@@ -414,16 +476,10 @@ class LeRobotSingleDataset(Dataset):
     def _get_metadata(self, embodiment_tag: EmbodimentTag) -> DatasetMetadata:
         """Get the metadata for the dataset."""
 
-        # 1. Modality metadata
-        modality_meta_path = self.dataset_path / LE_ROBOT_MODALITY_FILENAME
-        assert modality_meta_path.exists(), (
-            f"Please provide a {LE_ROBOT_MODALITY_FILENAME} file in {self.dataset_path}"
-        )
+        le_info = self._get_lerobot_info_meta()
+        le_modality_meta = self._load_lerobot_modality_meta(le_info)
 
-        # 1.1. State and action modalities
         simplified_modality_meta: dict[str, dict] = {}
-        with open(modality_meta_path, "r") as f:
-            le_modality_meta = LeRobotModalityMetadata.model_validate(json.load(f))
 
         for modality in ["state", "action"]:
             simplified_modality_meta[modality] = {}
@@ -441,15 +497,6 @@ class LeRobotSingleDataset(Dataset):
                     ],
                     "continuous": continuous,
                 }
-
-        # 1.2 Video modalities
-        le_info_path = self.dataset_path / LE_ROBOT_INFO_FILENAME
-        assert le_info_path.exists(), (
-            f"Please provide a {LE_ROBOT_INFO_FILENAME} file in {self.dataset_path}"
-        )
-
-        with open(le_info_path, "r") as f:
-            le_info = json.load(f)
 
         simplified_modality_meta["video"] = {}
         for new_key in le_modality_meta.video:
@@ -474,8 +521,8 @@ class LeRobotSingleDataset(Dataset):
                 "fps": fps,
             }
 
-        # 2. Dataset statistics
-        stats_path = self.dataset_path / LE_ROBOT_STATS_FILENAME
+        stats_filename = LE_ROBOT3_STATS_FILENAME if self._lerobot_version == "v3.0" else LE_ROBOT_STATS_FILENAME
+        stats_path = self.dataset_path / stats_filename
 
         def is_main():
             return (not dist.is_initialized()) or dist.get_rank() == 0
@@ -646,20 +693,24 @@ class LeRobotSingleDataset(Dataset):
                     trajectory_ids.append(ep_id)
                     trajectory_lengths.append(ep_len)
 
-                    from_timestamps = {}
+                    video_metadata = {}
                     for col in timestamp_cols:
                         value = episode[col]
                         if pd.isna(value):
                             continue
-                        # videos/{video_key}/from_timestamp -> {video_key}
                         video_key = str(col)[len("videos/") : -len("/from_timestamp")]
-                        from_timestamps[video_key] = float(value)
+                        base_key = f"videos/{video_key}"
+                        video_metadata[video_key] = {
+                            "chunk_index": int(episode[f"{base_key}/chunk_index"]),
+                            "file_index": int(episode[f"{base_key}/file_index"]),
+                            "from_timestamp": float(value),
+                        }
 
                     episode_meta = {
-                        "data/chunk_index": episode["data/chunk_index"],
-                        "data/file_index": episode["data/file_index"],
+                        "data/chunk_index": int(episode["data/chunk_index"]),
+                        "data/file_index": int(episode["data/file_index"]),
                         "data/file_from_index": index,
-                        "videos/from_timestamps": from_timestamps,
+                        "videos": video_metadata,
                     }
                     self.trajectory_ids_to_metadata[ep_id] = episode_meta
 
@@ -1005,15 +1056,24 @@ class LeRobotSingleDataset(Dataset):
                 delta_indices[key] = np.array(config.delta_indices)
         return delta_indices
 
+    def _load_lerobot_modality_meta(self, info_meta: dict | None = None) -> LeRobotModalityMetadata:
+        modality_meta_path = self.dataset_path / LE_ROBOT_MODALITY_FILENAME
+        if modality_meta_path.exists():
+            with open(modality_meta_path, "r") as f:
+                return LeRobotModalityMetadata.model_validate(json.load(f))
+
+        if self._lerobot_version == "v3.0":
+            if info_meta is None:
+                info_meta = self._get_lerobot_info_meta()
+            return _build_v3_modality_meta_from_info(info_meta)
+
+        raise AssertionError(
+            f"Please provide a {LE_ROBOT_MODALITY_FILENAME} file in {self.dataset_path}"
+        )
+
     def _get_lerobot_modality_meta(self) -> LeRobotModalityMetadata:
         """Get the metadata for the LeRobot dataset."""
-        modality_meta_path = self.dataset_path / LE_ROBOT_MODALITY_FILENAME
-        assert (
-            modality_meta_path.exists()
-        ), f"Please provide a {LE_ROBOT_MODALITY_FILENAME} file in {self.dataset_path}"
-        with open(modality_meta_path, "r") as f:
-            modality_meta = LeRobotModalityMetadata.model_validate(json.load(f))
-        return modality_meta
+        return self._load_lerobot_modality_meta(self._get_lerobot_info_meta())
 
     def _get_lerobot_info_meta(self) -> dict:
         """Get the metadata for the LeRobot dataset."""
@@ -1049,7 +1109,7 @@ class LeRobotSingleDataset(Dataset):
             df = df.reset_index()
             df = df.rename(columns={'index': 'task'})
             df = df[['task_index', 'task']]
-            return df
+            return df.set_index("task_index")
             
     def _check_integrity(self):
         """Use the config to check if the keys are valid and detect silent data corruption."""
@@ -1325,10 +1385,11 @@ class LeRobotSingleDataset(Dataset):
             )
         elif self._lerobot_version == "v3.0":
             episode_meta = self.trajectory_ids_to_metadata[trajectory_id]
+            video_meta = episode_meta["videos"][original_key]
             video_filename = self.video_path_pattern.format(
                 video_key=original_key,
-                chunk_index=episode_meta["data/chunk_index"],
-                file_index=episode_meta["data/file_index"],
+                chunk_index=video_meta["chunk_index"],
+                file_index=video_meta["file_index"],
             )
         return self.dataset_path / video_filename
 
@@ -1370,11 +1431,11 @@ class LeRobotSingleDataset(Dataset):
         video_timestamp = timestamp[step_indices]
         if self._lerobot_version == "v3.0":
             episode_meta = self.trajectory_ids_to_metadata.get(trajectory_id, {})
-            from_timestamps = episode_meta.get("videos/from_timestamps", {})
             original_video_key = self.lerobot_modality_meta.video[key].original_key
             if original_video_key is None:
                 original_video_key = key
-            from_timestamp = float(from_timestamps.get(original_video_key, 0.0))
+            video_meta = episode_meta.get("videos", {}).get(original_video_key, {})
+            from_timestamp = float(video_meta.get("from_timestamp", 0.0))
             video_timestamp = video_timestamp + from_timestamp
 
         return get_frames_by_timestamps(

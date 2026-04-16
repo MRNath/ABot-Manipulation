@@ -5,12 +5,32 @@ from typing import Sequence
 from omegaconf import OmegaConf
 
 from ABot.dataloader.gr00t_lerobot.datasets import LeRobotSingleDataset, LeRobotMixtureDataset, ValidationLeRobotMixtureDataset
-from ABot.dataloader.gr00t_lerobot.mixtures import DATASET_NAMED_MIXTURES
 from ABot.dataloader.gr00t_lerobot.data_config import ROBOT_TYPE_CONFIG_MAP
 from ABot.dataloader.gr00t_lerobot.embodiment_tags import ROBOT_TYPE_TO_EMBODIMENT_TAG, EmbodimentTag
 
 def collate_fn(batch):
     return batch
+
+
+def _resolve_mixture_spec(data_cfg: dict) -> list[tuple]:
+    data_mix = data_cfg.data_mix
+    if data_mix == "single_dataset":
+        dataset_name = data_cfg.get("dataset_name")
+        dataset_robot_type = data_cfg.get("dataset_robot_type")
+        dataset_weight = float(data_cfg.get("dataset_weight", 1.0))
+
+        if not dataset_name:
+            raise ValueError("`datasets.vla_data.dataset_name` is required when `data_mix=single_dataset`")
+        if not dataset_robot_type:
+            raise ValueError(
+                "`datasets.vla_data.dataset_robot_type` is required when `data_mix=single_dataset`"
+            )
+
+        return [(dataset_name, dataset_weight, dataset_robot_type, {})]
+
+    from ABot.dataloader.gr00t_lerobot.mixtures import DATASET_NAMED_MIXTURES
+
+    return DATASET_NAMED_MIXTURES[data_mix]
 
 def make_LeRobotSingleDataset(
     data_root_dir: Path | str,
@@ -63,9 +83,8 @@ def get_vla_dataset(
     Get a LeRobotMixtureDataset object.
     """
     data_root_dir = data_cfg.data_root_dir
-    data_mix = data_cfg.data_mix
     delete_pause_frame = data_cfg.get("delete_pause_frame", False)
-    mixture_spec = DATASET_NAMED_MIXTURES[data_mix]
+    mixture_spec = _resolve_mixture_spec(data_cfg)
     included_datasets, filtered_mixture_spec = set(), []
     for dataset_item in mixture_spec:
         if len(dataset_item) == 3:
@@ -117,7 +136,7 @@ def get_vla_dataset(
 
 def get_vla_dataset_test(
     data_cfg: dict,
-    mode: str = "train",
+    mode: str = "test",
     balance_dataset_weights: bool = False,
     balance_trajectory_weights: bool = False,
     seed: int = 42,
@@ -127,9 +146,8 @@ def get_vla_dataset_test(
     Get a ValidationLeRobotMixtureDataset object.
     """
     data_root_dir = data_cfg.data_root_dir
-    data_mix = data_cfg.data_mix
     delete_pause_frame = data_cfg.get("delete_pause_frame", False)
-    mixture_spec = DATASET_NAMED_MIXTURES[data_mix]
+    mixture_spec = _resolve_mixture_spec(data_cfg)
     included_datasets, filtered_mixture_spec = set(), []
     for dataset_item in mixture_spec:
         if len(dataset_item) == 3:

@@ -1,6 +1,6 @@
 # ABot/dataloader — 数据加载
 
-基于 LeRobot 格式封装多数据集混合加载，支持按权重采样与多机器人类型。
+基于 LeRobot 格式封装多数据集混合加载，支持按权重采样、多机器人类型，以及 LeRobot `v3.0` 原生元数据回退。
 
 ## 子模块索引
 
@@ -14,7 +14,7 @@
 | 文件 | 说明 |
 |------|------|
 | `ABot/dataloader/__init__.py` | 导出 `build_dataloader` 统一接口 |
-| `ABot/dataloader/lerobot_datasets.py` | 数据集构建工厂，依赖 `DATASET_NAMED_MIXTURES` |
+| `ABot/dataloader/lerobot_datasets.py` | 数据集构建工厂，支持命名 mixture 与 `single_dataset` 单数据集模式 |
 
 ## 快速使用
 
@@ -36,18 +36,22 @@ for batch in dataloader:
 datasets:
   vla_data:
     data_root_dir: /path/to/datasets    # 数据集根目录
-    data_mix: libero_mix                # 对应 DATASET_NAMED_MIXTURES 中的键
+    data_mix: libero_mix                # 对应 DATASET_NAMED_MIXTURES 中的键，或使用 single_dataset
     per_device_batch_size: 8
     image_size: 224                     # 训练时 resize 分辨率
     include_state: "True"               # 是否加载关节状态
     video_backend: decord               # decord 或 torchvision_av
     delete_pause_frame: false
+    dataset_name: my_dataset            # data_mix=single_dataset 时必填
+    dataset_robot_type: alicia_joint_v3 # data_mix=single_dataset 时必填
+    lerobot_version: v3.0               # Alicia / LeRobot v3 数据需显式指定
 ```
 
 ## 扩展指引
 
 - 添加新数据混合：在 `gr00t_lerobot/mixtures.py` 中注册新的 `DATASET_NAMED_MIXTURES` 键
 - 支持新机器人类型：在 `gr00t_lerobot/data_config.py` 的 `ROBOT_TYPE_CONFIG_MAP` 中添加配置
+- LeRobot `v3.0` 数据若没有 `meta/modality.json`，loader 会回退到 `meta/info.json` 自动推导基础 modality 元数据
 
 ## 论文实现对齐 (Paper Consistency)
 
@@ -59,5 +63,5 @@ datasets:
 
 负责数据流水线的集约化对接。为其他模块尤其是 Trainer 提供开箱即用的 Iterable 批次。
 
-- `build_dataloader(cfg: OmegaConf, dataset_py: str) -> DataLoader`:
-  核心工厂函数。接受全局的配置文件及数据集脚本指向（通常为 LeRobot 支持的脚本），依据 YAML 配置内的 `data_mix`（指定多源数据集），`per_device_batch_size` 提取数据和组装 `collate_fn`。向外部返回原生的 PyTorch `DataLoader` 对象。迭代出的批次会被打包填充处理，供模型 `forward` 拆解。
+- `build_dataloader(cfg: OmegaConf, dataset_py: str, mode: str = "train") -> DataLoader | None`:
+  核心工厂函数。接受全局配置和数据模式；训练模式构建标准采样 dataloader，测试模式在配置了 `train_test_split` 时构建顺序验证 dataloader，否则返回 `None`。支持 `DATASET_NAMED_MIXTURES` 与 `single_dataset` 两种数据声明方式。
