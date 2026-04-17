@@ -10,6 +10,7 @@ pretrain_ckpt=/home/gpu-admin/.cache/modelscope/hub/models/amap_cvlab/ABot-M0-Pr
 run_root_dir=./results/Checkpoints
 run_id=alicia_ft_abot_m0
 num_processes=4
+main_process_port=0
 # === End of environment variable configuration ===
 ###########################################################################################
 
@@ -28,6 +29,7 @@ cp $0 ${output_dir}/
 accelerate launch \
   --config_file ABot/config/deepseeds/deepspeed_zero2.yaml \
   --num_processes ${num_processes} \
+  --main_process_port ${main_process_port} \
   ABot/training/train.py \
   --config_yaml ${config_yaml} \
   --framework.name ${Framework_name} \
