@@ -28,3 +28,7 @@ bash examples/Alicia/train_files/run_alicia_train.sh
 - `lerobot_version: v3.0`
 - `video_backend: torchvision_av`
 - 默认留出最后 `8` 条 episode 做验证
+
+## 训练配方说明
+
+- 参数选型与公开 benchmark 对比说明见：[training_recipe.md](training_recipe.md)

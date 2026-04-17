@@ -2,20 +2,20 @@
 # === Please modify the following paths according to your environment ===
 Framework_name=ABot_M0
 freeze_module_list=""
-base_vlm=path_to_your_base_vlm_checkpoint
+base_vlm=/nfs/Data/Qwen3-VL-4B-Instruct
 config_yaml=./examples/Alicia/train_files/ABot_alicia.yaml
-datasets_root=/home/kongqingwei/data
-dataset_name=recore_dataset_two_box_location_offical
-pretrain_ckpt=path_to_your_pretrain_ckpt
+datasets_root=/nfs/kongqingwei/data
+dataset_name=recore_dataset_two_box_location_offical_flip
+pretrain_ckpt=/home/gpu-admin/.cache/modelscope/hub/models/amap_cvlab/ABot-M0-Pretrain
 run_root_dir=./results/Checkpoints
 run_id=alicia_ft_abot_m0
-num_processes=1
+num_processes=4
 # === End of environment variable configuration ===
 ###########################################################################################
 
 export WANDB_MODE=offline
 export WANDB_DISABLED=true
-export CUDA_HOME=/usr/local/cuda-12
+export CUDA_HOME=/usr/local/cuda
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 export PATH=$CUDA_HOME/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
