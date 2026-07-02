@@ -33,21 +33,20 @@ Action Model</h1>
 <table align="center" width="100%">
   <tr>
     <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/flower_global_view.gif" width="100%"/>
+      <img src="assets/flower_global_view.gif" width="100%"/>
       <b>Arrange Flower</b>
     </td>
     <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/fruits_global_view.gif" width="100%"/>
+      <img src="assets/fruits_global_view.gif" width="100%"/>
       <b>Arrange Fruits</b>
     </td>
     <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/hang_cup_global_view.gif" width="100%"/>
+      <img src="assets/hang_cup_global_view.gif" width="100%"/>
       <b>Hang Cup</b>
     </td>
   </tr>
 </table>
 
-| **T2V** | <video src="https://github.com/user-attachments/assets/14e10753-0366-4790-ad8f-7b66d821ed11" controls width="240"></video> | <video src="https://github.com/user-attachments/assets/c1778691-a80b-428c-8094-88bb1dd1d52b" controls width="240"></video> | <video src="https://github.com/user-attachments/assets/4ca28c79-9dfa-49de-9c3a-f4c7b6c766cd" controls width="240"></video> |
 
 ## 🌟 Core Highlights
 
