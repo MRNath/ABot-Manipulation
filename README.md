@@ -1,5 +1,7 @@
 <div align="center">
-<img src="[assets/logo.png](https://github.com/amap-cvlab/ABot-Manipulation/blob/main/assets/logo.png)" alt="Logo" width="200"/>
+<a href="https://github.com/amap-cvlab/ABot-Manipulation/blob/main/assets/logo.png">
+  <img src="assets/logo.png" alt="Logo" width="200"/>
+</a>
 
 <h1>ABot-M0.5: Unified Mobility-and-Manipulation World
 Action Model</h1>
@@ -30,15 +32,15 @@ Action Model</h1>
 
 <div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
   <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="assets/flower_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/flower_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
     <p><b>Arrange Flower</b></p>
   </div>
   <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="assets/fruits_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/fruits_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
     <p><b>Arrange Fruits</b></p>
   </div>
   <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="assets/hang_cup_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/hang_cup_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
     <p><b>Hang Cup</b></p>
   </div>
 </div>
