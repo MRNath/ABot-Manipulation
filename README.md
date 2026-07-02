@@ -14,6 +14,20 @@ Action Model</h1>
 
 </div>
 
+---
+
+> 📢 **Version Notice**
+> 
+> Welcome to the official repository of **ABot-M0.5** — our latest **World Action Model (WAM) for mobile manipulation**. ABot-M0.5 addresses the core bottlenecks of long-horizon mobile manipulation through a **three-level alignment** paradigm.
+> 
+> 🔗 If you are looking for our previous **ABot-M0**, a VLA foundation model for fixed-base tabletop manipulation based on Action Manifold Learning, please visit:
+> 👉 **[ABot-M0 (VLA Foundation Model)](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0)**
+
+
+
+---
+
+
 <div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
   <div align="center" style="width: 30%; min-width: 250px;">
     <video src="assets/flower_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
@@ -29,18 +43,9 @@ Action Model</h1>
   </div>
 </div>
 
----
-
-> 📢 **Version Notice**
-> 
-> Welcome to the official repository of **ABot-M0.5** — our latest **World Action Model (WAM) for mobile manipulation**. ABot-M0.5 addresses the core bottlenecks of long-horizon mobile manipulation through a **three-level alignment** paradigm.
-> 
-> 🔗 If you are looking for our previous **ABot-M0**, a VLA foundation model for fixed-base tabletop manipulation based on Action Manifold Learning, please visit:
-> 👉 **[ABot-M0 (VLA Foundation Model)](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0)**
-
----
 
 ## 🌟 Core Highlights
+
 <div style="text-align: center;">
   <img src="assets/teaser.png" alt="Teaser" width="100%"/>
 </div>
