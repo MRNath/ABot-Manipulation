@@ -30,20 +30,22 @@ Action Model</h1>
 ---
 
 
-<div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-  <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/flower_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
-    <p><b>Arrange Flower</b></p>
-  </div>
-  <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/fruits_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
-    <p><b>Arrange Fruits</b></p>
-  </div>
-  <div align="center" style="width: 30%; min-width: 250px;">
-    <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/hang_cup_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
-    <p><b>Hang Cup</b></p>
-  </div>
-</div>
+<table align="center" width="100%">
+  <tr>
+    <td align="center" width="33%">
+      <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/flower_global_view.mp4" width="100%" controls></video>
+      <b>Arrange Flower</b>
+    </td>
+    <td align="center" width="33%">
+      <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/fruits_global_view.mp4" width="100%" controls></video>
+      <b>Arrange Fruits</b>
+    </td>
+    <td align="center" width="33%">
+      <video src="https://raw.githubusercontent.com/amap-cvlab/ABot-Manipulation/main/assets/hang_cup_global_view.mp4" width="100%" controls></video>
+      <b>Hang Cup</b>
+    </td>
+  </tr>
+</table>
 
 
 ## 🌟 Core Highlights
