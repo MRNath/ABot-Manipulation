@@ -1,98 +1,92 @@
 <div align="center">
-<h2>🚀Note: ABot-M0.5 is coming soon! 🚀</h2>
-
 <img src="assets/logo.png" alt="Logo" width="200"/>
 
-<h1>ABot: VLA Foundation Models for Robotic Manipulation</h1>
+<h1>ABot-M0.5: Unified Mobility-and-Manipulation World
+Action Model</h1>
 
 <p align="center">
   <b>AMAP CV Lab</b>
 </p>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/2602.11236"><img src="https://img.shields.io/static/v1?label=Paper&message=Technical_Report&color=red&logo=arxiv"></a>
-  <a href="https://amap-cvlab.github.io/ABot-Manipulation/"><img src="https://img.shields.io/badge/Project-Website-blue"></a>
-  <a href="https://huggingface.co/acvlab"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20Model&message=HuggingFace&color=orange"></a>
-  <a href="https://www.modelscope.cn/datasets/amap_cvlab/Abot-M0-MetaData"><img src="https://img.shields.io/badge/🤖 Data-ModelScope-604DF4.svg"></a>
+  <a href="https://arxiv.org/pdf/2607.00678"><img src="https://img.shields.io/static/v1?label=Paper&message=Technical_Report&color=red&logo=arxiv"></a>
 </p>
 
 </div>
 
----
-
-## 📦 Repository Structure
-
-This repository hosts the **ABot** family of vision-language-action (VLA) foundation models for robotic manipulation. Each version is maintained on a dedicated branch:
-
-| Version | Branch | Status | Description |
-| :--- | :--- | :--- | :--- |
-| **ABot-M0** | [`ABot-M0`](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0) | ✅ Released | VLA foundation model with Action Manifold Learning (AML) |
-| **ABot-M0.5** | `ABot-M0.5` | 🚀 Coming Soon | Next-generation ABot model |
-
----
-
-## 🌟 ABot-M0 Highlights
-
-<div style="text-align: center;">
-  <img src="assets/model.jpg" alt="ABot-M0" width="888"/>
+<div align="center" style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+  <div align="center" style="width: 30%; min-width: 250px;">
+    <video src="assets/flower_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <p><b>Arrange Flower</b></p>
+  </div>
+  <div align="center" style="width: 30%; min-width: 250px;">
+    <video src="assets/fruits_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <p><b>Arrange Fruits</b></p>
+  </div>
+  <div align="center" style="width: 30%; min-width: 250px;">
+    <video src="assets/hang_cup_global_view.mp4" width="100%" autoplay muted loop playsinline></video>
+    <p><b>Hang Cup</b></p>
+  </div>
 </div>
 
-- **Massive & Unified Data:** Integrates over 6 million open-source trajectories — the largest unified dataset for robotic manipulation.
+---
 
-- **Innovative Action Paradigm:** Pioneers Action Manifold Learning (AML), which directly predicts clean actions instead of noise.
-
-- **Modular 3D Perception:** Supports plug-and-play modules to enhance 3D spatial understanding.
-
-### Results
-
-|  | LIBERO | LIBERO-PLUS | RoboCasa-GR1-Tabletop | RoboTwin2.0 |
-| :--- | :--- | :--- | :--- | :--- |
-| **ABot-M0** | **98.6** | **80.5** | **58.3** | **86.1** |
+> 📢 **Version Notice**
+> 
+> Welcome to the official repository of **ABot-M0.5** — our latest **World Action Model (WAM) for mobile manipulation**. ABot-M0.5 addresses the core bottlenecks of long-horizon mobile manipulation through a **three-level alignment** paradigm.
+> 
+> 🔗 If you are looking for our previous **ABot-M0**, a VLA foundation model for fixed-base tabletop manipulation based on Action Manifold Learning, please visit:
+> 👉 **[ABot-M0 (VLA Foundation Model)](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0)**
 
 ---
 
-## 🚀 Get Started with ABot-M0
+## 🌟 Core Highlights
+<div style="text-align: center;">
+  <img src="assets/teaser.png" alt="Teaser" width="100%"/>
+</div>
 
-Clone the repository and switch to the `ABot-M0` branch for installation, training, and evaluation:
+Unlike reactive VLA policies or existing WAMs that suffer from structural mismatches, **ABot-M0.5** is built on the insight that mobile manipulation requires strict alignment at three levels. Our core innovations include:
 
-```bash
-git clone https://github.com/amap-cvlab/ABot-Manipulation.git
-cd ABot-Manipulation
-git checkout ABot-M0
-```
-
-See the [ABot-M0 README](https://github.com/amap-cvlab/ABot-Manipulation/blob/ABot-M0/README.md) for detailed setup instructions.
-
----
-
-## 🏆 Model Zoo
-
-| Model Name | Repository | Description |
-| :--- | :--- | :--- |
-| ABot-Pretrain | [🤗 ABot-M0-Pretrain](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain) | Pre-training with action manifold learning |
-| ABot-LIBERO | [🤗 ABot-M0-LIBERO](https://huggingface.co/acvlab/ABot-M0-LIBERO) | Trained on LIBERO for LIBERO & LIBERO-Plus evaluation |
-| ABot-RoboCasa-GR1-Tabletop | [🤗 ABot-M0-Robocasa](https://huggingface.co/acvlab/ABot-M0-Robocasa) | Trained on RoboCasa-GR1-Tabletop |
-| ABot-Robotwin2 | [🤗 ABot-M0-RoboTwin2](https://huggingface.co/acvlab/ABot-M0-RoboTwin2) | Trained on RoboTwin2 Clean and Randomized |
+- 🎯 **Three-Level Alignment Paradigm:** We systematically identify and solve the structural bottlenecks in mobile manipulation: temporal granularity mismatch, action space entanglement, and train-test inconsistency.
+- 🎬 **Temporal Granularity Alignment (Latent Actions):** We introduce frame-level latent actions as a bridging space between coarse video latents and fine-grained robot controls, effectively capturing local visual state transitions and contact dynamics.
+- 🤖 **Action Space Alignment (Dual-level MoT):** We design an Action-Decoupled Mixture-of-Transformers architecture that separates heterogeneous action subspaces (e.g., base movement and arm manipulation), preventing action-distribution conflicts.
+- 🧠 **Inference Consistency Alignment (Dream-Forcing):** We propose a novel training strategy that progressively trains inverse dynamics on model-predicted (dreamed) videos, perfectly aligning training conditions with autoregressive inference and eliminating error accumulation.
+- 🏆 **State-of-the-Art Performance:** ABot-M0.5 achieves SOTA results across challenging benchmarks (RoboCasa365, RoboTwin 2.0, LIBERO-Plus) and demonstrates robust zero-shot generalization in real-world long-horizon mobile manipulation tasks.
 
 ---
 
 ## 📢 News
 
-[2026-6-1] 🥳 **ABot-M0** is now integrated with [RLinf](https://github.com/RLinf/RLinf), supporting PPO training.
+[2026-07-01] 🥳🥳**ABot-M0.5**'s [technical report](https://arxiv.org/pdf/2607.00678) have been released. Weights and codes are coming soon. 🎉🎉
 
-[2026-3-27] 🥳 **ABot-M0** [training code](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0), [pre-trained weights](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain), and [data](https://www.modelscope.cn/datasets/amap_cvlab/Abot-M0-MetaData) are now available.
+[2026-6-1] 🥳🥳**ABot-M0** is now integrated with [RLinf](https://github.com/RLinf/RLinf), supporting PPO training. 🎉🎉
 
-[2026-2-27] 🥳 **ABot-M0** [weights](https://huggingface.co/acvlab) and [inference code](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0) released. RoboTwin2.0 result updated to 86.1.
+[2026-3-27] 🥳🥳**ABot-M0**'s 🎉🎉 [training code](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0), [pre-trained weight](https://www.modelscope.cn/models/amap_cvlab/ABot-M0-Pretrain) and [data](https://www.modelscope.cn/datasets/amap_cvlab/Abot-M0-MetaData) are now available.🎉🎉
 
-[2026-2-11] 🥳 **ABot-M0** [technical report](https://arxiv.org/abs/2602.11236) released.
+[2026-2-27] 🥳🥳**ABot-M0**'s The [weights](https://huggingface.co/acvlab) and [inference code](https://github.com/amap-cvlab/ABot-Manipulation/tree/ABot-M0) have been released. And updated the latest result of ABot-M0 on RoboTwin2.0 to 86.1. The full content will be released soon.🎉🎉
+
+[2026-2-11] 🥳🥳**ABot-M0**'s [technical report](https://arxiv.org/abs/2602.11236) have been released. Weights and codes are coming soon. 🎉🎉
 
 ---
 
+
+## Results 🎉🎉
+|  | LIBERO | LIBERO-PLUS  |RoboCasa365 |RoboTwin2.0 |
+| :--- | :--- | :--- | :--- |:--- |
+| **ABot-M0.5** | **99.4** | **83.4** | **46.6**| **94.1**|
+
 ## 📜 Citing
 
-If you find **ABot** useful in your research or applications, please consider giving us a **star** 🌟 and citing:
+If you find **ABot-M0.5** and  **ABot-M0**  is useful in your research or applications, please consider giving us a **star** 🌟 and **citing** it by the following BibTeX entry:
 
 ```
+@article{chen2026abotm05,
+  title={ABot-M0.5: Unified Mobility-and-Manipulation World Action Model},
+  author={Chen, Ronghan and Yang, Yandan and Tang, Zuojin and Huo, Dongjie and Lin, Tong and Wu, Haoning and Liu, Haoyun and Chen, Yuzhi and Zheng, Lulu and Yuan, Botai and Li, Tianlun and Wang, Mingxin and Qi, Dekang and Hu, Bin and Mei, Wei and Xuan, Yuze and Yang, Haolong and Zhu, Yanqing and Xu, Mu and Ma, Zhiheng and Chang, Xinyuan},
+  journal={arXiv preprint arXiv:2607.00678},
+  year={2026}
+}
+
 @article{yang2026abot,
   title={ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learning},
   author={Yang, Yandan and Zeng, Shuang and Lin, Tong and Chang, Xinyuan and Qi, Dekang and Xiao, Junjin and Liu, Haoyun and Chen, Ronghan and Chen, Yuzhi and Huo, Dongjie and others},
@@ -100,9 +94,3 @@ If you find **ABot** useful in your research or applications, please consider gi
   year={2026}
 }
 ```
-
----
-
-## 🙏 Acknowledgement
-
-This project builds upon [starVLA](https://github.com/starVLA/starVLA), [Qwen3-VL](https://github.com/QwenLM/Qwen3-VL), [vggt](https://github.com/facebookresearch/vggt), [JiT](https://github.com/LTH14/JiT), [LeRobot](https://github.com/huggingface/lerobot), [Isaac-GR00T](https://github.com/NVIDIA/Isaac-GR00T) and [any4lerobot](https://github.com/Tavish9/any4lerobot). We thank these teams for their open-source contributions.
