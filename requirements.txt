@@ -1,0 +1,4 @@
+# Runtime dependencies live in pyproject.toml; this file installs the
+# package itself (editable) together with them.
+# Optional evaluation dependencies: pip install -e ".[eval-libero]" or -e ".[eval-robocasa]"
+-e .

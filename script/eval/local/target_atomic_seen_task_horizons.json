@@ -1,0 +1,74 @@
+[
+  {
+    "task_name": "CloseBlenderLid",
+    "task_horizon": 600
+  },
+  {
+    "task_name": "CloseFridge",
+    "task_horizon": 600
+  },
+  {
+    "task_name": "CloseToasterOvenDoor",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "CoffeeSetupMug",
+    "task_horizon": 400
+  },
+  {
+    "task_name": "NavigateKitchen",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "OpenCabinet",
+    "task_horizon": 700
+  },
+  {
+    "task_name": "OpenDrawer",
+    "task_horizon": 500
+  },
+  {
+    "task_name": "OpenStandMixerHead",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "PickPlaceCounterToCabinet",
+    "task_horizon": 500
+  },
+  {
+    "task_name": "PickPlaceCounterToStove",
+    "task_horizon": 400
+  },
+  {
+    "task_name": "PickPlaceDrawerToCounter",
+    "task_horizon": 500
+  },
+  {
+    "task_name": "PickPlaceSinkToCounter",
+    "task_horizon": 600
+  },
+  {
+    "task_name": "PickPlaceToasterToCounter",
+    "task_horizon": 400
+  },
+  {
+    "task_name": "SlideDishwasherRack",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "TurnOffStove",
+    "task_horizon": 500
+  },
+  {
+    "task_name": "TurnOnElectricKettle",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "TurnOnMicrowave",
+    "task_horizon": 300
+  },
+  {
+    "task_name": "TurnOnSinkFaucet",
+    "task_horizon": 400
+  }
+]

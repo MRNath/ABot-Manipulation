@@ -1,0 +1,66 @@
+# Python / packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Local editors / agents
+.vscode/
+.idea/
+.claude/
+.qoder/
+.agents/
+.codex/
+
+# Environments and local secrets
+.deps/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+id_rsa*
+id_ed25519*
+xdl_config_*.json
+xdl_config_*.json*
+
+# Model checkpoints, weights, and training artifacts
+train_out/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+
+# Experiment logs, caches, and generated media/results
+wandb/
+logs/
+outputs/
+visualization/
+robocasa_videos/
+evaluation/robocasa/results/
+robocasa_eval*.json
+*.log
+*.tmp
+
+# Local datasets and scratch directories
+data/
+datasets/
+script/pretrain/
+writing/
+ossutil_output/
+debug_eff/
+viz_tf_sf_all/

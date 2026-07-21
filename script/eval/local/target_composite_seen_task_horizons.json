@@ -1,0 +1,66 @@
+[
+  {
+    "task_name": "DeliverStraw",
+    "task_horizon": 1700
+  },
+  {
+    "task_name": "GetToastedBread",
+    "task_horizon": 2000
+  },
+  {
+    "task_name": "KettleBoiling",
+    "task_horizon": 1000
+  },
+  {
+    "task_name": "LoadDishwasher",
+    "task_horizon": 1200
+  },
+  {
+    "task_name": "PackIdenticalLunches",
+    "task_horizon": 2600
+  },
+  {
+    "task_name": "PreSoakPan",
+    "task_horizon": 1600
+  },
+  {
+    "task_name": "PrepareCoffee",
+    "task_horizon": 1200
+  },
+  {
+    "task_name": "RinseSinkBasin",
+    "task_horizon": 900
+  },
+  {
+    "task_name": "ScrubCuttingBoard",
+    "task_horizon": 800
+  },
+  {
+    "task_name": "SearingMeat",
+    "task_horizon": 2900
+  },
+  {
+    "task_name": "SetUpCuttingStation",
+    "task_horizon": 1600
+  },
+  {
+    "task_name": "StackBowlsCabinet",
+    "task_horizon": 1400
+  },
+  {
+    "task_name": "SteamInMicrowave",
+    "task_horizon": 1400
+  },
+  {
+    "task_name": "StirVegetables",
+    "task_horizon": 1600
+  },
+  {
+    "task_name": "StoreLeftoversInBowl",
+    "task_horizon": 1700
+  },
+  {
+    "task_name": "WashLettuce",
+    "task_horizon": 1100
+  }
+]

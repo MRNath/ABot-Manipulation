@@ -1,0 +1,66 @@
+[
+  {
+    "task_name": "ArrangeBreadBasket",
+    "task_horizon": 2900
+  },
+  {
+    "task_name": "ArrangeTea",
+    "task_horizon": 1500
+  },
+  {
+    "task_name": "BreadSelection",
+    "task_horizon": 1300
+  },
+  {
+    "task_name": "CategorizeCondiments",
+    "task_horizon": 1100
+  },
+  {
+    "task_name": "CuttingToolSelection",
+    "task_horizon": 800
+  },
+  {
+    "task_name": "GarnishPancake",
+    "task_horizon": 1800
+  },
+  {
+    "task_name": "GatherTableware",
+    "task_horizon": 1500
+  },
+  {
+    "task_name": "HeatKebabSandwich",
+    "task_horizon": 1800
+  },
+  {
+    "task_name": "MakeIceLemonade",
+    "task_horizon": 2000
+  },
+  {
+    "task_name": "PanTransfer",
+    "task_horizon": 1200
+  },
+  {
+    "task_name": "PortionHotDogs",
+    "task_horizon": 1500
+  },
+  {
+    "task_name": "RecycleBottlesByType",
+    "task_horizon": 1900
+  },
+  {
+    "task_name": "SeparateFreezerRack",
+    "task_horizon": 1600
+  },
+  {
+    "task_name": "WaffleReheat",
+    "task_horizon": 2700
+  },
+  {
+    "task_name": "WashFruitColander",
+    "task_horizon": 2100
+  },
+  {
+    "task_name": "WeighIngredients",
+    "task_horizon": 2000
+  }
+]

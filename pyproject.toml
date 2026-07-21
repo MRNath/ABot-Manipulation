@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wam"
+version = "0.1.0"
+description = "Abot-m0.5: World Action Model inference stack"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [{name = "The Abot Team"}]
+requires-python = ">=3.10"
+dependencies = [
+    "diffusers==0.38.*",
+    "transformers==4.55.2",
+    "accelerate",
+    "einops",
+    "numpy==1.26.4",
+    "tqdm",
+    "imageio[ffmpeg]",
+    "websockets",
+    "msgpack",
+    "opencv-python",
+    "typer",
+    "safetensors",
+    "Pillow",
+]
+
+[project.optional-dependencies]
+flash = ["flash_attn"]
+eval-libero = ["lerobot==0.3.3", "scipy"]
+eval-robocasa = ["gymnasium", "robocasa", "robosuite"]
+
+[tool.setuptools.packages.find]
+include = ["wam*", "wam_client*"]
