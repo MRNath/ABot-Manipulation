@@ -14,7 +14,7 @@ Action Model</h1>
 <p align="center">
   <a href="https://arxiv.org/pdf/2607.00678"><img src="https://img.shields.io/static/v1?label=Paper&message=Technical_Report&color=red&logo=arxiv"></a>
   <a href="https://huggingface.co/acvlab"><img src="https://img.shields.io/static/v1?label=Weights&message=HuggingFace&color=yellow&logo=huggingface"></a>
-  <a href="#"><img src="https://img.shields.io/static/v1?label=Project&message=Coming_Soon&color=brightgreen"></a>
+  <a href="https://amap-cvlab.github.io/ABot-Manipulation/"><img src="https://img.shields.io/static/v1?label=Project&message=Page&color=brightgreen&logo=googlechrome"></a>
 </p>
 
 
@@ -67,7 +67,7 @@ Unlike reactive VLA policies or existing WAMs that suffer from structural mismat
 
 ## 📢 News
 
-[2026-07-21] 🎉🎉 **Code Release.** The inference code, pre-trained weights, and evaluation scripts for **ABot-M0.5** are now available. 🎉🎉
+[2026-07-21] 🥳🥳 **Code Release.** The inference code, pre-trained weights, and evaluation scripts for **ABot-M0.5** are now available. 🎉🎉
 
 [2026-07-01] 🥳🥳**ABot-M0.5**'s [technical report](https://arxiv.org/pdf/2607.00678) have been released. Weights and codes are coming soon. 🎉🎉
 
